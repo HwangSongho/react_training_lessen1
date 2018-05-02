@@ -20207,10 +20207,27 @@ var Box = function (_Component) {
     return _this;
   }
 
+  // Componentが呼び出し元のComponentよりrender()の中で出力される際に呼ばれるメソッド
+
+
   _createClass(Box, [{
     key: 'componentWillMount',
     value: function componentWillMount() {
       this.setState({ boxTitle: Number.parseInt(Date.now(), 10) });
+    }
+
+    // Props が変更される際に呼ばれるメソッド
+
+  }, {
+    key: 'componentWillReceiveProps',
+    value: function componentWillReceiveProps(nextProps) {
+      if (this.props.boxTitlep != nextProps.boxTitleP) {
+        if (nextProps.boxTitleP == '') {
+          this.setState({ boxTitle: Number.parseInt(Date.now(), 10) });
+        } else if (nextProps.boxTitleP != this.state.boxTitle) {
+          this.setState({ boxTitle: nextProps.boxTitleP });
+        }
+      }
     }
   }, {
     key: 'render',
@@ -20239,7 +20256,8 @@ exports.default = Box;
 
 
 Box.propTypes = {
-  children: _react.PropTypes.any.isRequired
+  children: _react.PropTypes.any.isRequired,
+  boxTitleP: _react.PropTypes.string
 };
 
 },{"react":175}],178:[function(require,module,exports){
@@ -20285,6 +20303,9 @@ var PostalCodeAjax = function (_Component) {
     };
     return _this;
   }
+
+  // Component????DOM???????????????????
+
 
   _createClass(PostalCodeAjax, [{
     key: 'componentDidMount',
@@ -20390,7 +20411,7 @@ var Root = function (_Component) {
     var _this = _possibleConstructorReturn(this, (Root.__proto__ || Object.getPrototypeOf(Root)).call(this, props));
 
     _this.state = {
-      showBox: false
+      showBox: true
     };
     return _this;
   }
@@ -20406,7 +20427,12 @@ var Root = function (_Component) {
       var _this2 = this;
 
       var btnName = this.state.showBox ? 'Box非表示' : 'Box表示';
-      var boxComponent = this.state.showBox ? _react2.default.createElement(_PostalCodeAjax2.default, null) : null;
+      var boxTitle = this.state.boxTitle;
+      var boxComponent = this.state.showBox ? _react2.default.createElement(
+        _Box2.default,
+        { boxTitleP: boxTitle },
+        'Sample Box'
+      ) : null;
 
       return _react2.default.createElement(
         'div',
@@ -20416,12 +20442,15 @@ var Root = function (_Component) {
           null,
           this.props.title
         ),
+        'boxTitle: ',
+        _react2.default.createElement('input', { type: 'text', onChange: function onChange(elm) {
+            return _this2.setState({ boxTitle: elm.target.value });
+          } }),
         boxComponent,
         _react2.default.createElement(
           'button',
           {
-            className: 'btn btn-primary',
-            onClick: function onClick() {
+            className: 'btn btn-primary', onClick: function onClick() {
               return _this2.handleClick();
             } },
           btnName
@@ -20430,7 +20459,8 @@ var Root = function (_Component) {
           'div',
           null,
           this.props.children
-        )
+        ),
+        _react2.default.createElement(_PostalCodeAjax2.default, null)
       );
     }
   }]);
