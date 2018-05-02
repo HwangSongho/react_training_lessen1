@@ -1,5 +1,5 @@
 # react_training_lessen1
-React*Redux training
+React training
 
 以下サイトを参考にトレーニングを実施
 
